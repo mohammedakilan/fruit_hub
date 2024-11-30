@@ -62,6 +62,9 @@ class LoginViewBody extends StatelessWidget {
                 height: 33,
               ),
               const DontHaveAnAccountWidget(),
+                const SizedBox(
+                height: 33,
+              ),
               const OrDivider(),
               const SizedBox(
                 height: 16,
