@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_hub/constants.dart';
+import 'package:fruit_hub/core/widgets/custom_button.dart';
 import 'package:fruit_hub/core/widgets/custom_text_filed.dart';
+import 'package:fruit_hub/features/auth/presentation/views/widgets/have_account.dart';
 import 'package:fruit_hub/features/auth/presentation/views/widgets/terms_and_condition.dart';
 
 class SignupViewBody extends StatelessWidget {
@@ -8,7 +10,7 @@ class SignupViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return  SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: kHorizontalPadding,),
         child: Column(
@@ -35,7 +37,11 @@ class SignupViewBody extends StatelessWidget {
                 hintText: 'كلمة السر',
                 keyboardType: TextInputType.visiblePassword),
             SizedBox(height: 16),
-            TermsAndConditionWidget(),    
+            TermsAndConditionWidget(), 
+            SizedBox(height: 30),   
+            CustomButton(text:  'انشاء حساب جديد' , onPressed: () {}),
+            SizedBox(height:26),
+            HaveAnAccountWidget(),
           ],
         ),
       ),
