@@ -4,7 +4,8 @@ import 'package:fruit_hub/core/utils/app_colors.dart';
 import 'package:fruit_hub/core/utils/app_images.dart';
 
 class CustomCheckBox extends StatelessWidget {
-  const CustomCheckBox({super.key, required this.isChecked,  required this.onChecked});
+  const CustomCheckBox(
+      {super.key, required this.isChecked, required this.onChecked});
 
   final bool isChecked;
   final ValueChanged<bool> onChecked;
@@ -20,7 +21,7 @@ class CustomCheckBox extends StatelessWidget {
           height: 24,
           width: 24,
           decoration: ShapeDecoration(
-              color: isChecked ? AppColors.primaryColor : Colors.white,
+              color: isChecked ? AppColors.primaryColor : Colors.grey[300],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
                 side: BorderSide(
@@ -29,11 +30,8 @@ class CustomCheckBox extends StatelessWidget {
                 ),
               )),
           child: isChecked
-              ? Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: SvgPicture.asset(Assets.imagesCheck),
-                )
-              : SizedBox()),
+              ? Image.asset(Assets.imagesCheckPng) 
+              : const SizedBox()),
     );
   }
 }
