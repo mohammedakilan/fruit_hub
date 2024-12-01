@@ -1,16 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_hub/core/helpersFunction/on_generate_route.dart';
 import 'package:fruit_hub/core/services/shared_preferences_singleton.dart';
 import 'package:fruit_hub/core/utils/app_colors.dart';
 import 'package:fruit_hub/features/splash/presentation/views/splash_view.dart';
+import 'package:fruit_hub/firebase_options.dart';
 import 'package:fruit_hub/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await Prefs.init();
-
   runApp(const FruitHub());
 }
 
@@ -21,7 +24,7 @@ class FruitHub extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
           fontFamily: 'Cairo',
           colorScheme: ColorScheme.fromSeed(
             seedColor: AppColors.primaryColor,
