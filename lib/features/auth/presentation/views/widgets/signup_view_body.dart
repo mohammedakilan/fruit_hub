@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_hub/constants.dart';
+import 'package:fruit_hub/core/helpersFunction/build_erorr_snack_bar.dart';
 import 'package:fruit_hub/core/widgets/custom_button.dart';
 import 'package:fruit_hub/core/widgets/custom_text_filed.dart';
 import 'package:fruit_hub/features/auth/presentation/cubits/features/signup/presentation/cubit/signup/signup_cubit.dart';
@@ -18,12 +19,14 @@ class SignupViewBody extends StatefulWidget {
 class _SignupViewBodyState extends State<SignupViewBody> {
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
+  bool isTermsAccepted = false;
   @override
   Widget build(BuildContext context) {
     late String name, email, password;
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: kHorizontalPadding,
         ),
         child: Form(
@@ -31,7 +34,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
           key: fromKey,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               CustomTextFromFiled(
@@ -40,7 +43,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                   },
                   hintText: 'الاسم الكامل',
                   keyboardType: TextInputType.name),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               CustomTextFromFiled(
@@ -49,7 +52,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                   },
                   hintText: 'البريد الالكتروني',
                   keyboardType: TextInputType.emailAddress),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               PasswordFiled(
@@ -57,12 +60,26 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                   password = value!;
                 },
               ),
-              SizedBox(height: 16),
-              TermsAndConditionWidget(),
-              SizedBox(height: 30),
+              const SizedBox(
+                height: 16,
+              ),
+              TermsAndConditionWidget(
+                onTermsAccepted: (value) {
+                  isTermsAccepted = value;
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
               CustomButton(
-                  text: 'انشاء حساب جديد',
-                  onPressed: () {
+                text: 'انشاء حساب جديد',
+                onPressed: () {
+                  if (isTermsAccepted == false) {
+                    buildErrorSnackBar(
+                      context,
+                      'يجب الموافقة على الشروط والأحكام',
+                    );
+                  } else {
                     if (fromKey.currentState!.validate()) {
                       fromKey.currentState!.save();
                       context
@@ -70,13 +87,19 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                           .createUserWithEmailAndPassword(
                               email: email, password: password, name: name);
                     } else {
-                      setState(() {
-                        autovalidateMode = AutovalidateMode.always;
-                      });
+                      setState(
+                        () {
+                          autovalidateMode = AutovalidateMode.always;
+                        },
+                      );
                     }
-                  }),
-              SizedBox(height: 26),
-              HaveAnAccountWidget(),
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              const HaveAnAccountWidget(),
             ],
           ),
         ),
@@ -84,4 +107,3 @@ class _SignupViewBodyState extends State<SignupViewBody> {
     );
   }
 }
-
