@@ -5,6 +5,7 @@ import 'package:fruit_hub/core/widgets/custom_button.dart';
 import 'package:fruit_hub/core/widgets/custom_text_filed.dart';
 import 'package:fruit_hub/features/auth/presentation/cubits/features/signup/presentation/cubit/signup/signup_cubit.dart';
 import 'package:fruit_hub/features/auth/presentation/views/widgets/have_account.dart';
+import 'package:fruit_hub/features/auth/presentation/views/widgets/password_filed.dart';
 import 'package:fruit_hub/features/auth/presentation/views/widgets/terms_and_condition.dart';
 
 class SignupViewBody extends StatefulWidget {
@@ -51,16 +52,11 @@ class _SignupViewBodyState extends State<SignupViewBody> {
               SizedBox(
                 height: 16,
               ),
-              CustomTextFromFiled(
-                  onSaved: (value) {
-                    password = value!;
-                  },
-                  suffixIcon: Icon(
-                    Icons.remove_red_eye,
-                    color: Color(0xffc9cecf),
-                  ),
-                  hintText: 'كلمة السر',
-                  keyboardType: TextInputType.visiblePassword),
+              PasswordFiled(
+                onSaved: (value) {
+                  password = value!;
+                },
+              ),
               SizedBox(height: 16),
               TermsAndConditionWidget(),
               SizedBox(height: 30),
@@ -88,3 +84,4 @@ class _SignupViewBodyState extends State<SignupViewBody> {
     );
   }
 }
+
