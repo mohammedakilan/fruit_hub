@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_hub/core/helpersFunction/build_erorr_snack_bar.dart';
 import 'package:fruit_hub/core/widgets/custom_modal_progress_hud.dart';
 import 'package:fruit_hub/features/auth/presentation/cubits/signin/signin_cubit.dart';
 import 'package:fruit_hub/features/auth/presentation/views/widgets/signin_view_body.dart';
@@ -12,7 +13,13 @@ class SigninViewBodyBlocConsumer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SigninCubit, SigninState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is SigninSuccess) {
+        }
+        if (state is SigninFailure) {
+          buildErrorSnackBar(context, state.message);
+        }
+      },
       builder: (context, state) {
         return CustomModalProgressHud(
             isLoading: state is SigninLoading ? true : false,
