@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_hub/core/errors/exception.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
   Future<User> createUserWithEmailAndPassword(
@@ -14,16 +15,15 @@ class FirebaseAuthService {
       );
       return credential.user!;
     } on FirebaseAuthException catch (e) {
-      log('Exception in FirebaseAuthService.createUserWithEmailAndPassword: ${e.toString() } , ${e.code}');
+      log('Exception in FirebaseAuthService.createUserWithEmailAndPassword: ${e.toString()} , ${e.code}');
 
       if (e.code == 'weak-password') {
         throw CustomException(message: 'كلمة المرور ضعيفة جدًا.');
       } else if (e.code == 'email-already-in-use') {
         throw CustomException(
             message: 'الحساب موجود بالفعل لهذا البريد الإلكتروني.');
-      }else if (e.code == 'network-request-failed') {
+      } else if (e.code == 'network-request-failed') {
         throw CustomException(message: 'لا يوجد اتصال بالإنترنت.');
-
       } else {
         throw CustomException(message: 'حدث خطأ، يرجى المحاولة لاحقًا.');
       }
@@ -46,13 +46,19 @@ class FirebaseAuthService {
       log('Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()} , ${e.code}');
 
       if (e.code == 'user-not-found') {
-        throw CustomException(message: 'البريد الالكتروني او كلمة المرور غير صحيحة.');
+        throw CustomException(
+            message: 'البريد الالكتروني او كلمة المرور غير صحيحة.');
       } else if (e.code == 'wrong-password') {
-        throw CustomException(message: 'البريد الالكتروني او كلمة المرور غير صحيحة.');
+        throw CustomException(
+            message: 'البريد الالكتروني او كلمة المرور غير صحيحة.');
       } else if (e.code == 'network-request-failed') {
-        throw CustomException(message: 'لا يوجد اتصال بالإنترنت.');
+        throw CustomException(
+          message: 'لا يوجد اتصال بالإنترنت.',
+        );
       } else {
-        throw CustomException(message: 'حدث خطأ، يرجى المحاولة لاحقًا.');
+        throw CustomException(
+          message: 'حدث خطأ، يرجى المحاولة لاحقًا.',
+        );
       }
     } catch (e) {
       log('Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()}');
@@ -60,4 +66,22 @@ class FirebaseAuthService {
       throw CustomException(message: 'حدث خطأ، يرجى المحاولة لاحقًا.');
     }
   }
+
+
+Future<User> signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+  return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
+}
 }
