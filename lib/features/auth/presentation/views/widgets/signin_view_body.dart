@@ -5,7 +5,6 @@ import 'package:fruit_hub/core/utils/app_colors.dart';
 import 'package:fruit_hub/core/utils/app_text_styles.dart';
 import 'package:fruit_hub/core/widgets/custom_button.dart';
 import 'package:fruit_hub/core/widgets/custom_text_filed.dart';
-import 'package:fruit_hub/features/auth/domain/repos/auth_repo.dart';
 import 'package:fruit_hub/features/auth/presentation/cubits/signin/signin_cubit.dart';
 import 'package:fruit_hub/features/auth/presentation/views/widgets/dont_have_an_account_widget.dart';
 import 'package:fruit_hub/features/auth/presentation/views/widgets/or_divider.dart';
@@ -111,7 +110,9 @@ class _signinViewBodyState extends State<signinViewBody> {
                 SocialLoginButton(
                   image: 'assets/images/facebook_icon.svg',
                   title: 'تسجيل بواسطة فيسبوك',
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<SigninCubit>().signInWithFacebook();
+                  },
                 ),
               ],
             ),
