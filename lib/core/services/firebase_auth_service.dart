@@ -5,7 +5,6 @@ import 'package:fruit_hub/core/errors/exception.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-
 class FirebaseAuthService {
   Future<User> createUserWithEmailAndPassword(
       {required String email, required String password}) async {
@@ -45,9 +44,14 @@ class FirebaseAuthService {
       );
       return credential.user!;
     } on FirebaseAuthException catch (e) {
-      log('Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()} , ${e.code}');
+      log(
+        'Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()} , ${e.code}',
+      );
 
       if (e.code == 'user-not-found') {
+        throw CustomException(
+            message: 'البريد الالكتروني او كلمة المرور غير صحيحة.');
+      } else if (e.code == 'invalid-credential') {
         throw CustomException(
             message: 'البريد الالكتروني او كلمة المرور غير صحيحة.');
       } else if (e.code == 'wrong-password') {
@@ -63,39 +67,48 @@ class FirebaseAuthService {
         );
       }
     } catch (e) {
-      log('Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()}');
+      log(
+        'Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()}',
+      );
 
-      throw CustomException(message: 'حدث خطأ، يرجى المحاولة لاحقًا.');
+      throw CustomException(
+        message: 'حدث خطأ، يرجى المحاولة لاحقًا.',
+      );
     }
   }
 
+  Future<User> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-Future<User> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
+    // Once signed in, return the UserCredential
+    return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
+  }
 
-  // Once signed in, return the UserCredential
-  return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
-}
+  Future<User> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
 
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(
+      loginResult.accessToken!.tokenString,
+    );
 
-Future<User> signInWithFacebook() async {
-  // Trigger the sign-in flow
-  final LoginResult loginResult = await FacebookAuth.instance.login();
-
-  // Create a credential from the access token
-  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
-
-  // Once signed in, return the UserCredential
-  return (await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential)).user!;
-}
+    // Once signed in, return the UserCredential
+    return (await FirebaseAuth.instance.signInWithCredential(
+      facebookAuthCredential,
+    ))
+        .user!;
+  }
 }
