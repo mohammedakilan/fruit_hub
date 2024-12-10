@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_hub/core/errors/exception.dart';
 import 'package:fruit_hub/core/errors/failure.dart';
 import 'package:fruit_hub/core/services/database_service.dart';
@@ -11,7 +12,10 @@ import 'package:fruit_hub/features/auth/domain/entities/user_entity.dart';
 import 'package:fruit_hub/features/auth/domain/repos/auth_repo.dart';
 
 class AuthRepoImpl extends AuthRepo {
-  AuthRepoImpl( {required this.firebaseAuthService,required this.databaseService,});
+  AuthRepoImpl({
+    required this.firebaseAuthService,
+    required this.databaseService,
+  });
   final FirebaseAuthService firebaseAuthService;
   final DatabaseService databaseService;
 
@@ -20,13 +24,22 @@ class AuthRepoImpl extends AuthRepo {
       {required String email,
       required String password,
       required String name}) async {
+    User? user;
     try {
-      var user = await firebaseAuthService.createUserWithEmailAndPassword(
+       user = await firebaseAuthService.createUserWithEmailAndPassword(
           email: email, password: password);
-      return Right(UserModel.fromFirebaseUser(user));
+      var userEntity = UserModel.fromFirebaseUser(user);
+      await addUserData(user: userEntity);
+      return Right(userEntity);
     } on CustomException catch (e) {
+      if (user != null) {
+        await user.delete();
+      }
       return Left(ServerFailure(e.message));
     } catch (e) {
+      if (user != null) {
+        await user.delete();
+      }
       log('Exception in AuthRepoImpl.createUserWithEmailAndPassword: ${e.toString()}');
       return Left(ServerFailure('حدث خطأ، يرجى المحاولة لاحقًا.'));
     }
@@ -65,9 +78,7 @@ class AuthRepoImpl extends AuthRepo {
   Future<Either<Failure, UserEntity>> signInWithFacebook() async {
     try {
       var user = await firebaseAuthService.signInWithFacebook();
-      var userEntity = UserModel.fromFirebaseUser(user);
-      await addUserData(user: userEntity);
-      return Right(userEntity);
+      return Right(UserModel.fromFirebaseUser(user));
     } on CustomException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
