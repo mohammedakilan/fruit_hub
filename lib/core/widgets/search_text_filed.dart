@@ -12,37 +12,47 @@ class SearchTextFiled extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color(0x0a000000),
+            color: const Color(0x0A000000),
             spreadRadius: 0,
             blurRadius: 9,
             offset: const Offset(0, 2),
-          )
-        ]
+          ),
+        ],
       ),
       child: TextField(
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
-          prefixIcon: SizedBox(
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(8.0), // لتوفير مساحة داخل الـ icon
+            child: SvgPicture.asset(
+              Assets.imagesSearchIcon,
               height: 20,
-      
-            child: Center(child: SvgPicture.asset(Assets.imagesSearchIcon,  ))),
-            suffixIcon: SizedBox(
-              height: 20,
-              child: Center(child: SvgPicture.asset(Assets.imagesFilter))),
-            hintText: 'ابحث عن .......',
-            hintStyle: TextStyles.regular13.copyWith(
-              color: const Color(0xff949d9e),
+              width: 20,
             ),
-            filled: true,
-            fillColor:  Colors.white,
-            border: buildBorder(),
-            focusedBorder: buildBorder(),
-            enabledBorder: buildBorder()),
+          ),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.all(8.0), // لتوفير مساحة داخل الـ icon
+            child: SvgPicture.asset(
+              Assets.imagesFilter,
+              height: 20,
+              width: 20,
+            ),
+          ),
+          hintText: 'ابحث عن .......',
+          hintStyle: TextStyles.regular13.copyWith(
+            color: const Color(0xFF949D9E),
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          border: _buildBorder(),
+          focusedBorder: _buildBorder(),
+          enabledBorder: _buildBorder(),
+        ),
       ),
     );
   }
 
-  OutlineInputBorder buildBorder() {
+  OutlineInputBorder _buildBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(4),
       borderSide: const BorderSide(color: Colors.white, width: 1),

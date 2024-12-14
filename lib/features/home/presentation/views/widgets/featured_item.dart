@@ -12,7 +12,6 @@ class FeaturedItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var itemWidth = MediaQuery.of(context).size.width * .5;
     return SizedBox(
-      width: itemWidth,
       child: AspectRatio(
         aspectRatio: 342 / 158,
         child: Stack(
@@ -40,12 +39,13 @@ class FeaturedItem extends StatelessWidget {
                       style: TextStyles.regular13.copyWith(
                         color: Colors.white,
                       ),
-                    ),Spacer(),
+                    ),
+                    Spacer(),
                     Text(
                       'خصم 25%',
                       style: TextStyles.bold19.copyWith(color: Colors.white),
                     ),
-                     SizedBox(
+                    SizedBox(
                       height: 11,
                     ),
                     FeaturedItemButton(
