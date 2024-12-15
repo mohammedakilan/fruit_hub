@@ -18,7 +18,9 @@ class FeaturedItemButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.white,            
+              
+
         ),
         onPressed: onPressed,
         child: Padding(
