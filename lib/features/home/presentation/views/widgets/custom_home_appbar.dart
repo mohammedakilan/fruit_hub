@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fruit_hub/core/utils/app_images.dart';
 import 'package:fruit_hub/core/utils/app_text_styles.dart';
+import 'package:fruit_hub/core/widgets/notification_widget.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
   const CustomHomeAppBar({super.key});
@@ -9,16 +10,7 @@ class CustomHomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      trailing: Container(
-        padding: EdgeInsets.all(12),
-        decoration: ShapeDecoration(shape: 
-        OvalBorder(),
-        color: Color(0xffeef8ed)
-        ),
-        child: SvgPicture.asset(
-          Assets.imagesNotification,
-        ),
-      ),
+      trailing: NotificationWidget(),
       leading: SvgPicture.asset(
         Assets.imagesProfileImage,
       ),
@@ -37,3 +29,4 @@ class CustomHomeAppBar extends StatelessWidget {
     );
   }
 }
+

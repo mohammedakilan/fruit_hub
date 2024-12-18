@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_hub/core/utils/app_text_styles.dart';
+import 'package:fruit_hub/features/best_selling/presentation/view/best_selling_view.dart';
 
 class BestSellingHeader extends StatelessWidget {
   const BestSellingHeader({super.key});
@@ -14,10 +15,15 @@ class BestSellingHeader extends StatelessWidget {
           style: TextStyles.bold16,
         ),
         Spacer(),
-        Text(
-          'المزيد',
-          textAlign: TextAlign.center,
-          style: TextStyles.regular13.copyWith(color: Color(0xff949d9e)),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, BestSellingView.routeName);
+          },
+          child: Text(
+            'المزيد',
+            textAlign: TextAlign.center,
+            style: TextStyles.regular13.copyWith(color: Color(0xff949d9e)),
+          ),
         )
       ],
     );
